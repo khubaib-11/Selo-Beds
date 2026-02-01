@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Noto_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import { PromoBar } from "@/components/Promobar";
+import { Toaster } from "@/components/ui/sonner";
 
-const notoSans = Noto_Sans({variable:'--font-sans'});
+const notoSans = Noto_Sans({ variable: "--font-sans" });
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -27,7 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={notoSans.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={notoSans.variable}
+    >
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
@@ -35,7 +42,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <PromoBar />
+          <Navbar />
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

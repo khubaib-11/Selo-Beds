@@ -1,44 +1,43 @@
-import { NextLogo } from "./next-logo";
-import { SupabaseLogo } from "./supabase-logo";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "./ui/button";
+import heroImage from "../app/assets/hero.png";
 
 export function Hero() {
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
+    <div className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={heroImage}
+          alt="Hero background"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
-      </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
+
+      {/* Content */}
+      <div className="relative z-10 container px-4 md:px-6 flex flex-col items-center text-center gap-6">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-white max-w-3xl">
+          Sleep Better, Live Better
+        </h1>
+        <p className="text-lg md:text-xl text-gray-200 max-w-[600px]">
+          Discover the perfect mattress for your sleep style. Premium comfort,
+          exceptional support, and a 100-night trial.
+        </p>
+        <div className="flex gap-4">
+          <Link href="/mattresses">
+            <Button
+              size="lg"
+              className="font-semibold text-lg h-12 px-8"
+            >
+              Shop Mattresses
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

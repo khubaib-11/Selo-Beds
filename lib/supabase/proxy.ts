@@ -44,7 +44,14 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname !== "/" &&
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
+    !request.nextUrl.pathname.startsWith("/auth") &&
+    // ADD THESE TWO LINES:
+    !request.nextUrl.pathname.startsWith("/category") &&
+    !request.nextUrl.pathname.startsWith("/products") &&
+    !request.nextUrl.pathname.startsWith("/cart") &&
+    !request.nextUrl.pathname.startsWith("/api") &&
+    !request.nextUrl.pathname.startsWith("/success") &&
+    !request.nextUrl.pathname.startsWith("/track")
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
