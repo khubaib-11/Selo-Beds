@@ -170,7 +170,7 @@ function SuccessContent() {
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   e.g., Gate code is 1234, leave by the side door, beware of
-                  dog, call upon arrival.
+                  dog, call upon arrival. Add anything you want during delivery.
                 </p>
               </div>
               <Textarea

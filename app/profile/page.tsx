@@ -163,7 +163,7 @@ async function ProfileContent({
                 <ShoppingBag className="h-6 w-6 text-muted-foreground" />
               </div>
               <h3 className="text-xl font-black uppercase tracking-tight mb-2">
-                No orders found
+                No orders found.
               </h3>
               <p className="text-muted-foreground text-sm max-w-sm mb-8 leading-relaxed">
                 Looks like you haven&apos;t started your 100-night trial yet.
