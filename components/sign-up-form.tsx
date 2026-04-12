@@ -14,10 +14,10 @@ import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { toast } from "sonner";
 
-export function SignUpForm({
+function SignUpFormInner({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
@@ -183,5 +183,25 @@ export function SignUpForm({
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export function SignUpForm({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<"div">) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center p-8 text-muted-foreground uppercase tracking-widest font-bold">
+          Loading...
+        </div>
+      }
+    >
+      <SignUpFormInner
+        className={className}
+        {...props}
+      />
+    </Suspense>
   );
 }

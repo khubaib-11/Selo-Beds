@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Tables } from "@/database.types";
+import { Suspense } from "react";
 
 type Variant = Pick<Tables<"product_variants">, "price" | "size">;
 
@@ -49,7 +50,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({
+async function CategoryContent({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -84,7 +85,7 @@ export default async function CategoryPage({
   const hasProducts = category.products && category.products.length > 0;
 
   return (
-    <main className="min-h-screen bg-background">
+    <>
       {/* Hero Header - Always show this so the user knows where they are */}
       <section className="relative h-[40vh] w-full flex items-center justify-center overflow-hidden">
         <Image
@@ -213,6 +214,26 @@ export default async function CategoryPage({
           </div>
         )}
       </section>
+    </>
+  );
+}
+
+export default function CategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <main className="min-h-screen bg-background">
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center min-h-[60vh] text-sm font-bold uppercase tracking-widest text-muted-foreground animate-pulse">
+            Loading Collection...
+          </div>
+        }
+      >
+        <CategoryContent params={params} />
+      </Suspense>
       <Footer />
     </main>
   );

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Database } from "@/database.types";
 import Image from "next/image";
@@ -20,7 +20,7 @@ type OrderWithItems = Database["public"]["Tables"]["orders"]["Row"] & {
   }[];
 };
 
-export default function TrackingPage() {
+function TrackingContent() {
   const searchParams = useSearchParams();
   const autoSessionId = searchParams.get("session_id");
 
@@ -229,6 +229,20 @@ export default function TrackingPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+export default function TrackingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 className="h-12 w-12 animate-spin text-primary/20" />
+        </div>
+      }
+    >
+      <TrackingContent />
+    </Suspense>
   );
 }
 
