@@ -1,12 +1,13 @@
-import { Hero } from "@/components/hero";
-import { Features } from "@/components/features";
 import { CollectionGrid } from "@/components/CollectionGrid";
-import { Suspense } from "react";
-import { Reviews } from "@/components/Reviews";
-import { Newsletter } from "@/components/Newsletter";
+import { DeliveryMap } from "@/components/DeliveryMap";
 import { FAQ } from "@/components/Faq";
+import { Features } from "@/components/features";
 import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/hero";
+import { Newsletter } from "@/components/Newsletter";
+import { Reviews } from "@/components/Reviews";
 import { SleepQuiz } from "@/components/SleepQuiz";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
@@ -17,6 +18,7 @@ export default function Page() {
         <CollectionGrid />
       </Suspense>
       <SleepQuiz />
+      <DeliveryMap />
       <Reviews />
       <Newsletter />
       <FAQ />

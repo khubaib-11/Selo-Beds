@@ -20,7 +20,7 @@ const REVIEWS = [
     name: "David K.",
     role: "Hot Sleeper",
     content:
-      "Finally, a mattress that actually stays cool. The breathability is incredible. No more waking up in the middle of the night overheated.",
+      "Finally, a mattress that actually stays cool. The breath-ability is incredible. No more waking up in the middle of the night overheated.",
     rating: 5,
   },
   {
@@ -68,7 +68,7 @@ export function Reviews() {
                 </div>
 
                 <p className="text-foreground leading-relaxed italic">
-                  "{review.content}"
+                  &quot;{review.content}&quot;
                 </p>
 
                 <div className="flex items-center justify-between pt-4 border-t border-border/50">
@@ -90,6 +90,7 @@ export function Reviews() {
           ))}
         </div>
       </div>
+      Í
     </section>
   );
 }

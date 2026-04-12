@@ -4,6 +4,18 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 
+import { Tables } from "../database.types";
+
+type Variant = Pick<Tables<"product_variants">, "price">;
+
+type Product = {
+  product_variants: Variant[];
+};
+
+type Category = Tables<"categories"> & {
+  products: Product[];
+};
+
 export async function CollectionGrid() {
   const supabase = await createClient();
 
@@ -26,7 +38,10 @@ export async function CollectionGrid() {
   }
 
   return (
-    <section className="w-full py-24 bg-background">
+    <section
+      className="w-full py-24 bg-background"
+      id="collectionsGrid"
+    >
       <div className="container px-4 md:px-6 mx-auto">
         {/* Header */}
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-20">
@@ -45,12 +60,20 @@ export async function CollectionGrid() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {categories.map((category: any) => {
+        <div
+          className={`grid gap-12 ${
+            categories.length === 1
+              ? "grid-cols-1 max-w-md mx-auto"
+              : categories.length === 2
+                ? "grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto"
+                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          }`}
+        >
+          {categories.map((category: Category) => {
             // Calculate Price Range from variants
             const allPrices = category.products
-              .flatMap((p: any) => p.product_variants)
-              .map((v: any) => v.price);
+              .flatMap((p: Product) => p.product_variants || [])
+              .map((v: Variant) => v.price);
 
             const minPrice = allPrices.length ? Math.min(...allPrices) : 0;
             const maxPrice = allPrices.length ? Math.max(...allPrices) : 0;
@@ -66,7 +89,10 @@ export async function CollectionGrid() {
                   className="relative aspect-[3/4] overflow-hidden rounded-[2.5rem] bg-muted mb-8 transition-transform duration-500 group-hover:-translate-y-2 shadow-sm group-hover:shadow-2xl"
                 >
                   <Image
-                    src={category.image_url || "/sleepQuiz.png"}
+                    src={
+                      category.image_url ||
+                      "https://zxkrobxvmerfpavvuzsx.supabase.co/storage/v1/object/public/products/Cozy,%20Neutral-Toned%20Bedroom%20Haven%20(2).png"
+                    }
                     alt={category.name}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"

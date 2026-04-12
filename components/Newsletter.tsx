@@ -1,7 +1,8 @@
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import { Mail } from "lucide-react";
 import Image from "next/image";
+import NewsLetterImage from "../app/assets/public/newsletter.png";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 export function Newsletter() {
   return (
@@ -10,7 +11,7 @@ export function Newsletter() {
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/newsletter.png"
+          src={NewsLetterImage}
           alt="Atmospheric background"
           fill
           className="object-cover opacity-40"

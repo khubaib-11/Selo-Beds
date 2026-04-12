@@ -1,27 +1,31 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Loader2,
-  Search,
-  ArrowLeft,
-  Package,
-  MapPin,
-  CheckCircle2,
-} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { createClient } from "@/lib/supabase/client";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Database } from "@/database.types";
 import Image from "next/image";
+
+type OrderWithItems = Database["public"]["Tables"]["orders"]["Row"] & {
+  items?: {
+    name: string;
+    image: string;
+    size: string;
+    quantity: number;
+    price: number;
+  }[];
+};
 
 export default function TrackingPage() {
   const searchParams = useSearchParams();
   const autoSessionId = searchParams.get("session_id");
 
   const [loading, setLoading] = useState(false);
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<OrderWithItems | null>(null);
   const [form, setForm] = useState({ tracking: "", email: "" });
 
   const supabase = createClient();
@@ -34,19 +38,27 @@ export default function TrackingPage() {
       sessionId?: string;
     }) => {
       setLoading(true);
-      let query = supabase.from("orders").select("*");
+      let query = supabase.from("orders").select(`
+        *,
+        order_items (
+          quantity,
+          price_at_purchase,
+          products (
+            name,
+            image_url
+          )
+        )
+      `);
 
       if (params.sessionId) {
         query = query.eq("stripe_session_id", params.sessionId);
       } else {
         query = query
-          .eq("tracking_number", params.tracking?.toUpperCase())
-          .or(
-            `guest_email.eq.${params.email},user_id.in.(select id from profiles where email = '${params.email}')`,
-          );
+          .ilike("tracking_number", params.tracking || "")
+          .ilike("email", params.email || "");
       }
 
-      const { data, error } = await query.single();
+      const { data, error } = await query.maybeSingle();
 
       if (error || !data) {
         if (!params.sessionId)
@@ -55,7 +67,20 @@ export default function TrackingPage() {
         return;
       }
 
-      setOrder(data);
+      // Map Supabase relationships to the expected component structure
+      const formattedOrder: OrderWithItems = {
+        ...data,
+        items:
+          data.order_items?.map((item) => ({
+            name: item.products?.name || "Mattress",
+            image: item.products?.image_url || "/sleepQuiz.png",
+            size: "Standard",
+            quantity: item.quantity ?? 1,
+            price: item.price_at_purchase,
+          })) || [],
+      };
+
+      setOrder(formattedOrder);
       setLoading(false);
     },
     [supabase],
@@ -106,16 +131,18 @@ export default function TrackingPage() {
 
           {/* Render Order Items */}
           <div className="space-y-6">
-            {order.items?.map((item: any, i: number) => (
+            {order.items?.map((item, i: number) => (
               <div
                 key={i}
                 className="flex items-center gap-6 border-b border-border/50 pb-6 last:border-0"
               >
                 <div className="h-24 w-24 rounded-3xl bg-muted overflow-hidden shrink-0">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
                     className="h-full w-full object-cover"
+                    width={240}
+                    height={240}
                   />
                 </div>
                 <div className="flex-1">
@@ -135,7 +162,7 @@ export default function TrackingPage() {
                 Ship To
               </p>
               <p className="text-sm font-bold">
-                {order.guest_email || "Verified Customer"}
+                {order.email || "Verified Customer"}
               </p>
             </div>
             <div className="text-right">

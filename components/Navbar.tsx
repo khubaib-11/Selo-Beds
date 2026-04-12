@@ -1,18 +1,20 @@
 "use client";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import { createClient } from "@/lib/supabase/client";
 import { useCartStore } from "@/lib/store/useCartStore";
-
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Logo from "./Logo";
 export default function Navbar() {
   const totalItems = useCartStore((state) => state.getTotalItems());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState<
     { name: string; slug: string }[]
   >([]);
+  const [user, setUser] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -22,6 +24,15 @@ export default function Navbar() {
       if (data) setCategories(data);
     };
     fetchCategories();
+
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUser(data?.user || null));
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user || null);
+      },
+    );
+    return () => authListener.subscription.unsubscribe();
   }, []);
 
   return (
@@ -36,17 +47,7 @@ export default function Navbar() {
           {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
 
-        {/* Logo */}
-        <Link
-          href="/"
-          className="group flex flex-col justify-center"
-        >
-          <span className="text-xl font-black leading-[0.85] tracking-tighter text-foreground group-hover:text-primary transition-colors uppercase">
-            Your
-            <br />
-            Mattress
-          </span>
-        </Link>
+        <Logo />
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-10">
@@ -59,30 +60,44 @@ export default function Navbar() {
               {category.name}
             </Link>
           ))}
+          <Link
+            href="/track"
+            className="text-sm font-semibold tracking-wide text-muted-foreground hover:text-primary transition-colors uppercase"
+          >
+            Track Order
+          </Link>
         </div>
 
         {/* Action Icons */}
         <div className="flex items-center gap-2 md:gap-5">
           {mounted && (
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 text-muted-foreground hover:text-primary hover:bg-accent rounded-full transition-all active:scale-95"
+              onClick={() =>
+                setTheme(resolvedTheme === "dark" ? "light" : "dark")
+              }
+              className="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all active:scale-95"
             >
-              <BrightnessIcon />
+              {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
             </button>
           )}
 
           <Link
-            href="/profile"
-            className="hidden md:flex p-2 text-muted-foreground hover:text-primary hover:bg-accent rounded-full transition-all"
+            href={user ? "/profile" : "/auth/login"}
+            className="hidden md:flex p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all"
             aria-label="Profile"
           >
-            <ProfileIcon />
+            {user ? (
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-foreground border border-dashed border-gray-300 text-xs font-bold text-primary uppercase">
+                {user.email?.charAt(0) || "U"}
+              </div>
+            ) : (
+              <ProfileIcon />
+            )}
           </Link>
 
           <Link
             href="/cart"
-            className="relative p-2 text-muted-foreground hover:text-primary hover:bg-accent rounded-full transition-all"
+            className="relative p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all"
             aria-label="Cart"
           >
             <CartIcon />
@@ -118,22 +133,39 @@ export default function Navbar() {
                 {category.name}
               </Link>
             ))}
+            <Link
+              href="/track"
+              className="text-lg font-bold tracking-tight text-foreground hover:text-primary transition-colors py-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Track Order
+            </Link>
           </div>
 
           <div className="mt-4 pt-6 border-t border-border flex flex-col gap-4 text-muted-foreground">
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={() =>
+                setTheme(resolvedTheme === "dark" ? "light" : "dark")
+              }
               className="flex items-center gap-3 font-medium hover:text-primary transition-colors"
             >
-              <BrightnessIcon />
-              <span>Switch Theme</span>
+              {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
+              <span>
+                {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
+              </span>
             </button>
             <Link
-              href="/profile"
+              href={user ? "/profile" : "/auth/login"}
               className="flex items-center gap-3 font-medium hover:text-primary transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <ProfileIcon />
+              {user ? (
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary uppercase">
+                  {user.email?.charAt(0) || "U"}
+                </div>
+              ) : (
+                <ProfileIcon />
+              )}
               <span>My Profile</span>
             </Link>
           </div>
@@ -173,7 +205,7 @@ function MenuIcon() {
   );
 }
 
-function BrightnessIcon() {
+function SunIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -185,18 +217,39 @@ function BrightnessIcon() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="icon icon-tabler icons-tabler-outline icon-tabler-brightness"
+      className="icon icon-tabler icons-tabler-outline icon-tabler-sun"
     >
       <path
         stroke="none"
         d="M0 0h24v24H0z"
         fill="none"
       />
-      <path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-      <path d="M12 3l0 18" />
-      <path d="M12 9l4.65 -4.65" />
-      <path d="M12 14.3l7.37 -7.37" />
-      <path d="M12 19.6l8.85 -8.85" />
+      <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+      <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="icon icon-tabler icons-tabler-outline icon-tabler-moon"
+    >
+      <path
+        stroke="none"
+        d="M0 0h24v24H0z"
+        fill="none"
+      />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   );
 }

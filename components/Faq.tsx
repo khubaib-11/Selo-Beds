@@ -21,11 +21,6 @@ const FAQS = [
     answer:
       "Our mattresses work on almost any flat surface—including boxed springs, slatted bases, or even the floor. We just recommend ensuring slats are no more than 3 inches apart for optimal support.",
   },
-  {
-    question: "How is the mattress shipped?",
-    answer:
-      "We use advanced compression technology to ship your mattress in a conveniently sized box. Once opened, it will expand to its full shape within 24 to 48 hours.",
-  },
 ];
 
 export function FAQ() {

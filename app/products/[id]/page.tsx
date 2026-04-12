@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Star, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import { ProductConfigurator } from "@/components/product-configurator";
+import { Badge } from "@/components/ui/badge";
+import { createClient } from "@/lib/supabase/server";
+import { LucideIcon, RefreshCw, ShieldCheck, Star, Truck } from "lucide-react";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 
 export default async function ProductPage({
   params,
@@ -35,9 +35,9 @@ export default async function ProductPage({
   if (!product) notFound();
 
   // Find minimum price for display
-  const minPrice = Math.min(
-    ...product.product_variants.map((v: any) => v.price),
-  );
+  // const minPrice = Math.min(
+  //   ...product.product_variants.map((v: any) => v.price),
+  // );
 
   return (
     <main className="container mx-auto px-4 py-12 md:py-20">
@@ -47,7 +47,10 @@ export default async function ProductPage({
           <div className="sticky top-32 space-y-4">
             <div className="relative aspect-square overflow-hidden rounded-[2rem] bg-muted shadow-xl">
               <Image
-                src={product.image_url || "/sleepQuiz.png"}
+                src={
+                  product.image_url ||
+                  "https://zxkrobxvmerfpavvuzsx.supabase.co/storage/v1/object/public/products/Cozy,%20Neutral-Toned%20Bedroom%20Haven%20(2).png"
+                }
                 alt={product.name}
                 fill
                 priority
@@ -174,7 +177,7 @@ export default async function ProductPage({
           <div className="relative aspect-video bg-muted rounded-[2rem] overflow-hidden">
             {/* A secondary lifestyle image or dimension diagram */}
             <Image
-              src="/sleepQuiz.png"
+              src="https://zxkrobxvmerfpavvuzsx.supabase.co/storage/v1/object/public/products/Cozy,%20Neutral-Toned%20Bedroom%20Haven%20(2).png"
               alt="Dimensions"
               fill
               className="object-cover opacity-50 grayscale"
@@ -191,7 +194,7 @@ export default async function ProductPage({
   );
 }
 
-function TrustItem({ icon: Icon, text }: { icon: any; text: string }) {
+function TrustItem({ icon: Icon, text }: { icon: LucideIcon; text: string }) {
   return (
     <div className="flex items-center gap-3">
       <div className="p-2 bg-muted rounded-lg">

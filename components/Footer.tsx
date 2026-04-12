@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import {
   Facebook,
   Instagram,
@@ -9,8 +9,9 @@ import {
   Youtube,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Copyright } from "./copyright";
-import { createClient } from "@/lib/supabase/client";
+import Logo from "./Logo";
 
 // Keep Support and Company static as they are administrative
 const SUPPORT_LINKS = [
@@ -54,15 +55,8 @@ export function Footer() {
       <div className="container px-4 md:px-6 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           {/* Brand Section */}
-          <div className="flex flex-col space-y-6 text-center md:text-left">
-            <Link
-              href="/"
-              className="text-2xl font-bold leading-none tracking-tight text-foreground hover:text-primary transition-colors uppercase"
-            >
-              Your
-              <br />
-              Mattress
-            </Link>
+          <div className="flex flex-col items-center justify-center space-y-6 text-center md:text-left">
+            <Logo />
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto md:mx-0">
               Crafting the future of sleep with sustainable materials and
               unmatched support. Designed for every body, every night.

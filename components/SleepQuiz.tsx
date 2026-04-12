@@ -1,9 +1,7 @@
-import Image from "next/image";
-import { Button } from "./ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-// Assuming you moved the image to public as discussed previously for consistency
-// If still in assets, the import works, but public/ is standard for Next.js images
+import Image from "next/image";
 import SleepQuizImage from "../app/assets/public/sleepQuiz.png";
+import { Button } from "./ui/button";
 
 export function SleepQuiz() {
   return (
@@ -14,10 +12,10 @@ export function SleepQuiz() {
           <div className="p-8 md:p-12 lg:p-16 space-y-8 flex flex-col justify-center">
             <div className="space-y-4">
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground">
-                Finding the perfect sleep shouldn't be a guess.
+                Finding the perfect sleep shouldn&apos;t be a guess.
               </h2>
               <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-                Take our 2-minute Sleep Quiz. We'll analyze your sleeping
+                Take our 2-minute Sleep Quiz. We&apos;ll analyze your sleeping
                 position, temperature preferences, and pressure points to
                 recommend your ideal mattress.
               </p>

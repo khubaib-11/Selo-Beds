@@ -1,10 +1,53 @@
+import { Footer } from "@/components/Footer";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ShoppingBag, ArrowLeft } from "lucide-react";
+import { Tables } from "@/database.types";
+
+type Variant = Pick<Tables<"product_variants">, "price" | "size">;
+
+type Product = Pick<
+  Tables<"products">,
+  "id" | "name" | "image_url" | "description"
+> & {
+  product_variants: Variant[];
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+
+  const { data: category } = await supabase
+    .from("categories")
+    .select("name, image_url")
+    .eq("slug", slug)
+    .single();
+
+  if (!category) {
+    return {
+      title: "Category Not Found | Your Mattress",
+    };
+  }
+
+  return {
+    title: `${category.name} Mattresses & Essentials | Your Mattress`,
+    description: `Shop our premium ${category.name.toLowerCase()} collection. Discover tailored comfort and handcrafted quality for every sleeper.`,
+    openGraph: {
+      title: `${category.name} Collection | Your Mattress`,
+      description: `Shop our premium ${category.name.toLowerCase()} collection. Discover tailored comfort and handcrafted quality for every sleeper.`,
+      images: category.image_url ? [{ url: category.image_url }] : [],
+    },
+  };
+}
 
 export default async function CategoryPage({
   params,
@@ -45,8 +88,11 @@ export default async function CategoryPage({
       {/* Hero Header - Always show this so the user knows where they are */}
       <section className="relative h-[40vh] w-full flex items-center justify-center overflow-hidden">
         <Image
-          src={category.image_url || "/sleepQuiz.png"}
-          alt={category.name}
+          src={
+            category.image_url ||
+            "https://zxkrobxvmerfpavvuzsx.supabase.co/storage/v1/object/public/products/Cozy,%20Neutral-Toned%20Bedroom%20Haven%20(2).png"
+          }
+          alt={`${category.name} Collection Hero Image`}
           fill
           priority
           className="object-cover opacity-60 grayscale-[0.5]"
@@ -68,31 +114,34 @@ export default async function CategoryPage({
       {/* Conditional Rendering: Product Grid OR Empty State */}
       <section className="container mx-auto px-4 py-20">
         {hasProducts ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            {category.products.map((product: any) => {
-              const prices = product.product_variants.map((v: any) => v.price);
+          <div className="flex flex-col gap-24">
+            {(category.products as unknown as Product[]).map((product) => {
+              const prices = product.product_variants.map((v) => v.price);
               const startingPrice = Math.min(...prices);
 
               return (
                 <div
                   key={product.id}
-                  className="group flex flex-col md:flex-row gap-8 items-center border-b border-border/50 pb-16 last:border-0"
+                  className="group flex flex-col lg:flex-row gap-12 lg:gap-20 items-center"
                 >
-                  <div className="relative aspect-square w-full md:w-1/2 overflow-hidden rounded-3xl bg-muted">
+                  <div className="relative aspect-square w-full lg:w-1/2 overflow-hidden rounded-[2.5rem] bg-muted shadow-sm group-hover:shadow-2xl transition-all duration-500">
                     <Image
-                      src={product.image_url || "/sleepQuiz.png"}
-                      alt={product.name}
+                      src={
+                        product.image_url ||
+                        "https://zxkrobxvmerfpavvuzsx.supabase.co/storage/v1/object/public/products/Cozy,%20Neutral-Toned%20Bedroom%20Haven%20(2).png"
+                      }
+                      alt={`Buy ${product.name} - Premium ${category.name}`}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     />
                   </div>
 
-                  <div className="w-full md:w-1/2 space-y-6">
-                    <div className="space-y-2">
-                      <h2 className="text-3xl font-bold tracking-tight">
+                  <div className="w-full lg:w-1/2 space-y-8 md:space-y-10">
+                    <div className="space-y-4">
+                      <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter">
                         {product.name}
                       </h2>
-                      <p className="text-primary font-semibold tracking-wide uppercase text-xs">
+                      <p className="text-primary font-bold tracking-[0.2em] uppercase text-sm md:text-base">
                         Starting at ${startingPrice.toLocaleString()}
                       </p>
                     </div>
@@ -101,15 +150,20 @@ export default async function CategoryPage({
                       {product.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2">
-                      {product.product_variants.map((v: any) => (
-                        <span
-                          key={v.size}
-                          className="text-[10px] border border-border px-2 py-1 rounded-md text-muted-foreground uppercase font-bold"
-                        >
-                          {v.size}
-                        </span>
-                      ))}
+                    <div className="space-y-4">
+                      <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                        Available Sizes
+                      </h3>
+                      <div className="flex flex-wrap gap-3">
+                        {product.product_variants.map((v) => (
+                          <span
+                            key={v.size}
+                            className="text-xs border-2 border-border/50 px-4 py-2 rounded-full text-foreground uppercase font-bold tracking-wider"
+                          >
+                            {v.size}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
                     <Link
@@ -118,7 +172,7 @@ export default async function CategoryPage({
                     >
                       <Button
                         size="lg"
-                        className="rounded-full px-10 font-bold uppercase tracking-widest text-[11px] h-14 bg-primary hover:bg-primary/90"
+                        className="w-full sm:w-auto rounded-full px-12 font-black uppercase tracking-[0.2em] text-xs h-16 bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                       >
                         Configure Your Sleep
                       </Button>
@@ -159,6 +213,7 @@ export default async function CategoryPage({
           </div>
         )}
       </section>
+      <Footer />
     </main>
   );
 }

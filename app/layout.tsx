@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Noto_Sans } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { PromoBar } from "@/components/Promobar";
 import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
+import { Geist, Noto_Sans } from "next/font/google";
+import "./globals.css";
 
 const notoSans = Noto_Sans({ variable: "--font-sans" });
 
@@ -14,8 +14,14 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Selo Beds",
+  description:
+    "Discover the perfect mattress for your sleep style. Premium comfort, exceptional support, and a 100-night trial.",
+  icons: {
+    icon: "../app/assets/public/favicon.ico",
+    shortcut: "../app/assets/public/favicon-16x16.png",
+    apple: "../app/assets/public/apple-touch-icon.png",
+  },
 };
 
 const geistSans = Geist({
@@ -33,7 +39,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={notoSans.variable}
+      className={`${notoSans.variable} scroll-smooth`}
     >
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
