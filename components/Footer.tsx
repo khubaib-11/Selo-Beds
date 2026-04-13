@@ -15,17 +15,17 @@ import Logo from "./Logo";
 
 // Keep Support and Company static as they are administrative
 const SUPPORT_LINKS = [
-  { label: "Shipping & Returns", href: "/shipping" },
+  { label: "Delivery & Returns", href: "/delivery-returns" },
   { label: "100-Night Trial", href: "/trial" },
   { label: "Warranty", href: "/warranty" },
   { label: "FAQ", href: "/faq" },
 ];
 
 const COMPANY_LINKS = [
-  { label: "Our Story", href: "/about" },
+  { label: "Our Story", href: "/our-story" },
   { label: "Sustainability", href: "/sustainability" },
   { label: "Contact Us", href: "/contact" },
-  { label: "Showrooms", href: "/locations" },
+  { label: "Showrooms", href: "/showrooms" },
 ];
 
 export function Footer() {

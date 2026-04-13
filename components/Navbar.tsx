@@ -87,7 +87,7 @@ export default function Navbar() {
             aria-label="Profile"
           >
             {user ? (
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-foreground border border-dashed border-gray-300 text-xs font-bold text-primary uppercase">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-background border border-primary text-xs font-bold text-primary uppercase">
                 {user.email?.charAt(0) || "U"}
               </div>
             ) : (
@@ -101,7 +101,7 @@ export default function Navbar() {
             aria-label="Cart"
           >
             <CartIcon />
-            {totalItems > 0 && (
+            {mounted && totalItems > 0 && (
               <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
                 {totalItems}
               </span>
@@ -160,7 +160,7 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {user ? (
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary uppercase">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-background border border-primary text-xs font-bold text-primary uppercase">
                   {user.email?.charAt(0) || "U"}
                 </div>
               ) : (

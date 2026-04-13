@@ -1,13 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { Tables } from "@/database.types";
 
 export function PromoBar() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [promoData, setPromoData] = useState<Tables<"store_settings"> | null>(
+    null,
+  );
+  const supabase = createClient();
 
-  if (!isVisible) return null;
+  useEffect(() => {
+    const fetchPromoData = async () => {
+      const { data, error } = await supabase
+        .from("store_settings")
+        .select("*")
+        .eq("id", 1)
+        .single();
+
+      if (!error && data && data.promo_active) {
+        setPromoData(data);
+        setIsVisible(true);
+      }
+    };
+
+    fetchPromoData();
+  }, [supabase]);
+
+  if (!isVisible || !promoData) return null;
 
   return (
     <div className="relative w-full bg-primary text-primary-foreground py-2.5 px-4 overflow-hidden">
@@ -16,14 +39,17 @@ export function PromoBar() {
 
       <div className="container mx-auto flex items-center justify-center relative z-10">
         <div className="flex items-center gap-2 text-xs md:text-sm font-bold tracking-wider uppercase">
-          <Sparkles className="h-4 w-4 animate-pulse" />
-          <span>New Year Sale: Save up to $400 on select mattresses</span>
-          <Link
-            href="/mattresses"
-            className="ml-2 underline underline-offset-4 hover:opacity-80 transition-opacity"
-          >
-            Shop Now
-          </Link>
+          <Sparkles className="h-4 w-4 animate-pulse shrink-0" />
+          <span className="text-center">{promoData.promo_message}</span>
+
+          {promoData.promo_link_url && promoData.promo_link_text && (
+            <Link
+              href={promoData.promo_link_url}
+              className="ml-2 underline underline-offset-4 hover:opacity-80 transition-opacity shrink-0"
+            >
+              {promoData.promo_link_text}
+            </Link>
+          )}
         </div>
 
         {/* Close Button */}

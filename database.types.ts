@@ -270,6 +270,30 @@ export type Database = {
         }
         Relationships: []
       }
+      store_settings: {
+        Row: {
+          id: number
+          promo_active: boolean | null
+          promo_link_text: string | null
+          promo_link_url: string | null
+          promo_message: string | null
+        }
+        Insert: {
+          id?: number
+          promo_active?: boolean | null
+          promo_link_text?: string | null
+          promo_link_url?: string | null
+          promo_message?: string | null
+        }
+        Update: {
+          id?: number
+          promo_active?: boolean | null
+          promo_link_text?: string | null
+          promo_link_url?: string | null
+          promo_message?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
