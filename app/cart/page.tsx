@@ -309,7 +309,10 @@ export default function CartPage() {
                         Learn how it works
                       </button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px] rounded-[2rem] p-8">
+                    <DialogContent
+                      className="sm:max-w-[425px] rounded-[2rem] p-8"
+                      title="Checkout details dialogue"
+                    >
                       <DialogHeader>
                         <div className="relative h-6 w-16 mb-2">
                           <Image

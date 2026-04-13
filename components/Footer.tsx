@@ -55,7 +55,7 @@ export function Footer() {
       <div className="container px-4 md:px-6 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           {/* Brand Section */}
-          <div className="flex flex-col items-center justify-center space-y-6 text-center md:text-left">
+          <div className="flex flex-col items-center justify-center md:items-start md:justify-start space-y-6 text-center md:text-left">
             <Logo />
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto md:mx-0">
               Crafting the future of sleep with sustainable materials and
@@ -108,13 +108,13 @@ export function Footer() {
 
           <div className="flex flex-wrap justify-center items-center gap-6 text-[10px] text-muted-foreground uppercase tracking-[0.2em]">
             <Link
-              href="/privacy"
+              href="/privacy-policy"
               className="hover:text-primary transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
-              href="/terms"
+              href="/terms-of-service"
               className="hover:text-primary transition-colors"
             >
               Terms of Service

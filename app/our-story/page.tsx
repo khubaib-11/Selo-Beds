@@ -1,9 +1,8 @@
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Heart, MapPin, Sparkles, ShieldCheck } from "lucide-react";
+import { Heart, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function OurStoryPage() {
   return (
@@ -37,21 +36,22 @@ export default function OurStoryPage() {
 
           <div className="space-y-8">
             <h2 className="text-3xl font-black uppercase tracking-tight">
-              Premium sleep shouldn't be a luxury.
+              Premium sleep shouldn&apos;t be a luxury.
             </h2>
             <div className="space-y-6 text-muted-foreground leading-relaxed">
               <p>
                 Selo Beds started with a simple realization: buying a mattress
                 has become a miserable experience. If you go to a traditional
                 retailer, you end up paying double what the mattress is worth
-                just to cover the store's rent and the salesperson's commission.
+                just to cover the store&apos;s rent and the salesperson&apos;s
+                commission.
               </p>
               <p>
-                Then came the "bed-in-a-box" companies. While they fixed the
-                pricing, they introduced a new problem: they crush, vacuum-seal,
-                and roll their mattresses just to save on shipping. This damages
-                the internal structure and traps chemical smells, leaving you to
-                sleep on a compromised bed.
+                Then came the &quot;bed-in-a-box&quot; companies. While they
+                fixed the pricing, they introduced a new problem: they crush,
+                vacuum-seal, and roll their mattresses just to save on shipping.
+                This damages the internal structure and traps chemical smells,
+                leaving you to sleep on a compromised bed.
               </p>
               <p className="font-bold text-foreground">
                 We knew we could do it better.
@@ -128,12 +128,12 @@ export default function OurStoryPage() {
             <Heart size={28} />
           </div>
           <h2 className="text-3xl font-black uppercase tracking-tighter">
-            We've got your back.
+            We&apos;ve got your back.
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            We aren't a faceless corporation. We are a small, dedicated team
-            right here in the West Midlands, working hard every day to make sure
-            you get the best night's sleep of your life.
+            We aren&apos;t a faceless corporation. We are a small, dedicated
+            team right here in the West Midlands, working hard every day to make
+            sure you get the best night&apos;s sleep of your life.
           </p>
           <div className="pt-8">
             <Button

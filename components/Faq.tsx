@@ -4,22 +4,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Link from "next/link";
 
 const FAQS = [
   {
     question: "How does the 100-night trial work?",
     answer:
-      "It's simple. Once your mattress arrives, you have 100 nights to sleep on it. If you decide it's not for you, we'll arrange a free pickup and provide a full refund. No questions asked, no hidden fees.",
+      "Your 100 nights begin the day your mattress is delivered. Because it takes time for your spine to adjust to proper support, we require a minimum 30-night break-in period. If you still don't love it between day 30 and 100, simply contact us. We will arrange a free courier collection from your home and issue a full refund.",
   },
   {
     question: "What makes your mattresses different?",
     answer:
-      "We use a proprietary blend of cooling gels and high-density support foams. Unlike traditional memory foam, our material responds to your body temperature to ensure you never wake up overheated.",
+      "Unlike 'bed-in-a-box' brands, we never crush, vacuum-pack, or roll our mattresses. Rolling damages internal support and traps chemical smells. Your Selo mattress arrives from our Tyseley hub in its true form—structurally perfect, featuring premium high-density foams, and ready to sleep on the second it comes through your door.",
   },
   {
     question: "Do I need a specific bed frame?",
     answer:
-      "Our mattresses work on almost any flat surface—including boxed springs, slatted bases, or even the floor. We just recommend ensuring slats are no more than 3 inches apart for optimal support.",
+      "Selo mattresses are designed to work on any firm, flat surface, including platform beds, box springs, or slatted bases. To maintain proper support and keep your 10-year warranty valid, please ensure that if you use a slatted base, the gaps between the slats are no wider than 3 inches.",
   },
 ];
 
@@ -63,9 +64,11 @@ export function FAQ() {
         <div className="mt-16 p-8 rounded-3xl bg-muted/50 border border-border text-center">
           <p className="text-sm font-medium text-foreground">
             Still have questions?
-            <button className="ml-2 text-primary font-bold hover:underline">
-              Contact our sleep experts
-            </button>
+            <Link href="/contact">
+              <button className="ml-2 text-primary font-bold hover:underline">
+                Contact our sleep experts
+              </button>
+            </Link>
           </p>
         </div>
       </div>

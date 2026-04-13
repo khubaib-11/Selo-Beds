@@ -149,10 +149,11 @@ function SignUpFormInner({
                 Login
               </Link>
             </div>
+
             <Button
               variant="outline"
               type="button"
-              className="w-full py-6 rounded-full font-bold uppercase tracking-[0.1em] flex gap-3 items-center"
+              className="w-full py-6 mt-8 rounded-full font-bold uppercase tracking-[0.1em] flex gap-3 items-center"
               onClick={handleGoogleLogin}
             >
               {/* You can use a Google SVG icon here */}
