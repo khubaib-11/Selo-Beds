@@ -27,7 +27,7 @@ export default function AccessibilityPage() {
             size={24}
           />
           <p className="text-sm leading-relaxed">
-            At Selo Beds, we believe that a great night's sleep should be
+            At Selo Beds, we believe that a great night&apos;s sleep should be
             accessible to everyone—and that journey starts right here on our
             website. We are actively committed to ensuring digital accessibility
             for people with disabilities.
